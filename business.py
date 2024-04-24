@@ -4,8 +4,8 @@ from flask_cors import CORS
 import requests
 from datetime import datetime
 
-AUTH_SERVICE_URL = "http://auth:3000/auth"
-IO_SERVICE_URL = 'http://io:5050'
+AUTH_SERVICE_URL = "http://ia-ticket_auth-service:3000/auth"
+IO_SERVICE_URL = 'http://ia-ticket_io-service:5050'
 
 app = Flask(__name__)
 CORS(app)
