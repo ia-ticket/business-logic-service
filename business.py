@@ -118,11 +118,15 @@ def refund_ticket():
         if datetime.fromisoformat(show_date_and_time_str) < current_time:
             return jsonify({'message': 'Refund period has ended'}), show.status_code
     
-    response = requests.put(f'{IO_SERVICE_URL}/status', headers=headers, json={"ticket_id": ticket_id, "ticket_status": "available"})
-    if response.status_code == 200:
-        return jsonify(response.json())
+    response_refund = requests.put(f'{IO_SERVICE_URL}/status', headers=headers, json={"ticket_id": ticket_id, "ticket_status": "available"})
+    if response_refund.status_code == 200:
+            if response_costumer.status_code == 200:
+                response_costumer = requests.put(f'{IO_SERVICE_URL}/costumer-email', headers=headers, json={"ticket_id": ticket_id, "email": None})
+                return jsonify(response_costumer.json())
+            else:
+                return jsonify({'message': 'Failed to refund ticket'}), response_costumer.status_code
     else:
-        return jsonify({'message': 'Failed to refund ticket'}), response.status_code
+        return jsonify({'message': 'Failed to refund ticket'}), response_refund.status_code
     
 
 if __name__ == "__main__":
