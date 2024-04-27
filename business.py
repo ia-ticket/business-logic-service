@@ -120,11 +120,11 @@ def refund_ticket():
     
     response_refund = requests.put(f'{IO_SERVICE_URL}/status', headers=headers, json={"ticket_id": ticket_id, "ticket_status": "available"})
     if response_refund.status_code == 200:
-            if response_costumer.status_code == 200:
-                response_costumer = requests.put(f'{IO_SERVICE_URL}/costumer-email', headers=headers, json={"ticket_id": ticket_id, "email": None})
-                return jsonify(response_costumer.json())
-            else:
-                return jsonify({'message': 'Failed to refund ticket'}), response_costumer.status_code
+        response_costumer = requests.put(f'{IO_SERVICE_URL}/costumer-email', headers=headers, json={"ticket_id": ticket_id, "email": None})    
+        if response_costumer.status_code == 200:
+            return jsonify(response_costumer.json())
+        else:
+            return jsonify({'message': 'Failed to refund ticket'}), response_costumer.status_code
     else:
         return jsonify({'message': 'Failed to refund ticket'}), response_refund.status_code
     
